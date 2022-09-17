@@ -19,6 +19,16 @@
             <Button x:Name="cmdUp" x:FieldModifier="private" FontSize="10" Padding="0,-4,0,0" Content="▲" Click="cmdUp_Click" Margin="36,2,5,25" />
             <Button x:Name="cmdDown" x:FieldModifier="private" FontSize="10" Padding="0,-4,0,0" Content="▼" Click="cmdDown_Click" Margin="36,20,5,5" />
         </Grid>
-        <ListBox Grid.Row="1" Margin="5" Name="lbProcesses" FontSize="22"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <ListBox Grid.Row="1" Name="lbProcesses" FontSize="22" Width="300" Margin="5"/>
+            <StackPanel Orientation="Vertical" Width="180" Margin="5" >
+                <Label x:Name="lbIdProcess" Margin="0,20" FontSize="22"/>
+                <Label x:Name="lbTimeStartPro" Margin="0,20" FontSize="22"/>
+                <Label x:Name="lbCPUTime" Margin="0,20" FontSize="22"/>
+                <Label x:Name="lbCountThread" Margin="0,20" FontSize="22"/>
+                <Label x:Name="lbCountProcess" Margin="0,20" FontSize="22"/>
+            </StackPanel>
+        </StackPanel>
+        
     </Grid>
 </Window>
