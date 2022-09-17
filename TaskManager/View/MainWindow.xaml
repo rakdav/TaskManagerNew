@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManager"
    mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="500">
+        Title="MainWindow" Height="450" Width="600">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -20,13 +20,26 @@
             <Button x:Name="cmdDown" x:FieldModifier="private" FontSize="10" Padding="0,-4,0,0" Content="▼" Click="cmdDown_Click" Margin="36,20,5,5" />
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <ListBox Grid.Row="1" Name="lbProcesses" FontSize="22" Width="300" Margin="5"/>
-            <StackPanel Orientation="Vertical" Width="180" Margin="5" >
-                <Label x:Name="lbIdProcess" Margin="0,20" FontSize="22"/>
-                <Label x:Name="lbTimeStartPro" Margin="0,20" FontSize="22"/>
-                <Label x:Name="lbCPUTime" Margin="0,20" FontSize="22"/>
-                <Label x:Name="lbCountThread" Margin="0,20" FontSize="22"/>
-                <Label x:Name="lbCountProcess" Margin="0,20" FontSize="22"/>
+            <ListBox Grid.Row="1" Name="lbProcesses" FontSize="22" Width="300" Margin="5" SelectionChanged="lbProcesses_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5">
+                            <TextBlock FontSize="18" Text="{Binding Path=ProcessName}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Удалить" Click="MenuItem_Click"></MenuItem>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+            <StackPanel Orientation="Vertical" Width="280" Margin="5"  >
+                <Label x:Name="lbIdProcess" Margin="0,10" FontSize="22"/>
+                <Label x:Name="lbTimeStartPro" Margin="0,10" FontSize="22"/>
+                <Label x:Name="lbCPUTime" Margin="0,10" FontSize="22"/>
+                <Label x:Name="lbCountThread" Margin="0,10" FontSize="22"/>
+                <Label x:Name="lbCountProcess" Margin="0,10" FontSize="22"/>
             </StackPanel>
         </StackPanel>
         

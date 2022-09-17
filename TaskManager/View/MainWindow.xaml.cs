@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -22,10 +23,11 @@ namespace TaskManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Process[] process;
+        private Process[] Processes { get; set; }
         private TimerCallback callback;   
         private Timer timer;
         private int timeUpdate;
+        private Process process;
         public MainWindow()
         {
             InitializeComponent();
@@ -46,13 +48,8 @@ namespace TaskManager
         }
         public void TasksUpdate()
         {
-            Dispatcher.Invoke(()=>lbProcesses.Items.Clear());
-            process = Process.GetProcesses();
-            foreach (Process proc in process)
-            {
-                Dispatcher.Invoke(() => 
-                            lbProcesses.Items.Add(proc.ProcessName));
-            }
+            Processes = Process.GetProcesses().OrderBy(p=>p.ProcessName).ToArray();
+            Dispatcher.Invoke(() => lbProcesses.ItemsSource=Processes);
         }
 
         #endregion
@@ -76,8 +73,15 @@ namespace TaskManager
         private void cmdDown_Click(object sender, RoutedEventArgs e)
         {
             NumValue--;
-            timeUpdate=NumValue;
-            timer.Change(0, timeUpdate * 1000);
+            if (NumValue > 0)
+            {
+                timeUpdate = NumValue;
+                timer.Change(0, timeUpdate * 1000);
+            }
+            else
+            {
+                NumValue = 1;
+            }
         }
 
         private void txtNum_TextChangeds(object sender, TextChangedEventArgs e)
@@ -91,5 +95,38 @@ namespace TaskManager
                 txtNum.Text = _numValue.ToString();
             timeUpdate = int.Parse(txtNum.Text);
         }
-   }
+
+        private void lbProcesses_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = lbProcesses.SelectedIndex;
+            if (index != -1)
+            {
+                process = Processes[index];
+                if (process != null)
+                {
+                    try
+                    {
+                        lbIdProcess.Content = process.Id.ToString();
+                        lbCPUTime.Content = process.PrivilegedProcessorTime.ToString();
+                        lbCountThread.Content = process.Threads.Count.ToString();
+                        lbTimeStartPro.Content = process.StartTime.ToString();
+                        lbCountProcess.Content = Processes.Where(p => p.ProcessName.Equals(process.ProcessName)).ToArray().Length;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                }
+            }
+
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            process.CloseMainWindow();
+            process.Close();
+            TasksUpdate();
+        }
+    }
 }
